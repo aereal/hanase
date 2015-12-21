@@ -1,0 +1,9 @@
+apikey = "{{ mackerel_agent_apikey }}"
+
+{% if mackerel_agent_roles is defined %}
+roles = [
+{% for role in mackerel_agent_roles %}
+  "{{ role }}",
+{% endfor %}
+]
+{% endif %}
