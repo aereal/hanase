@@ -1,0 +1,7 @@
+---
+
+-
+  name: Configure hostname
+  hostname:
+    name: hanase
+  sudo: yes
