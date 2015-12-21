@@ -1,0 +1,7 @@
+---
+
+-
+  hosts: vps
+  gather_facts: no
+  roles:
+    - sshd

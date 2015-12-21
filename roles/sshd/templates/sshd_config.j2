@@ -1,0 +1,13 @@
+Protocol 2
+Port 22
+UsePrivilegeSeparation yes
+SyslogFacility AUTH
+LogLevel INFO
+PermitRootLogin no
+StrictModes yes
+ChallengeResponseAuthentication no
+PasswordAuthentication no
+GSSAPIAuthentication no
+X11Forwarding no
+Subsystem sftp /usr/lib/openssh/sftp-server
+UsePAM no

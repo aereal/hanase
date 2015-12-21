@@ -1,0 +1,16 @@
+---
+
+-
+  name: Install sshd
+  apt:
+    name: openssh-server
+    state: latest
+
+-
+  name: Install sshd_config
+  template:
+    dest: /etc/ssh/sshd_config
+    src: sshd_config.j2
+  sudo: yes
+  notify:
+    - Restart sshd
