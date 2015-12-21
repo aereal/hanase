@@ -1,0 +1,8 @@
+---
+
+-
+  name: Fetch authorized_keys from GitHub
+  get_url:
+    url: https://github.com/aereal.keys
+    dest: /home/aereal/.ssh/authorized_keys
+    validate_certs: yes
