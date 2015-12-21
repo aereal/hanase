@@ -5,3 +5,11 @@
   hostname:
     name: hanase
   sudo: yes
+
+-
+  name: Append hosts entry
+  lineinfile:
+    state: present
+    dest: /etc/hosts
+    line: '127.0.0.1 hanase'
+  sudo: yes
