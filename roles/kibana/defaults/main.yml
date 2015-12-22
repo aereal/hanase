@@ -1,0 +1,8 @@
+---
+
+kibana_version_name: '4.3.1-linux-x64'
+kibana_root_path: /opt/kibana
+kibana_user: kibana
+kibana_group: staff
+kibana_port: 5601
+kibana_log_path: /var/log/app/kibana/kibana.log

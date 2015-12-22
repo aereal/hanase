@@ -9,6 +9,8 @@
     - ntp
     - mackerel-agent
     - firewall
+    - supervisor
     - elasticsearch
     - td-agent
+    - kibana
     - nginx
