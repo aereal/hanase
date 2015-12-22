@@ -6,6 +6,7 @@
   roles:
     - sshd
     - hostname
+    - ntp
     - mackerel-agent
     - firewall
     - elasticsearch
