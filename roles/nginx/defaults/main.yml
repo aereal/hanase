@@ -1,0 +1,5 @@
+---
+
+nginx_config_root: /etc/nginx
+nginx_inc_config_root: "{{ nginx_config_root }}/inc"
+nginx_vhost_config_root: "{{ nginx_config_root }}/vhosts"
