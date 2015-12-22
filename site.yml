@@ -7,3 +7,4 @@
     - sshd
     - hostname
     - mackerel-agent
+    - firewall

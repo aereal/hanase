@@ -1,0 +1,36 @@
+---
+
+-
+  name: Install ufw
+  apt:
+    name: ufw
+    state: latest
+
+-
+  name: Enable logging
+  ufw:
+    logging: 'on'
+
+-
+  name: Disable incoming by default
+  ufw:
+    direction: incoming
+    policy: deny
+
+-
+  name: Enable outgoing by default
+  ufw:
+    direction: outgoing
+    policy: allow
+
+-
+  name: Allow SSH port
+  ufw:
+    rule: allow
+    port: "{{ sshd_port }}"
+    proto: tcp
+
+-
+  name: Enable ufw
+  ufw:
+    state: enabled
