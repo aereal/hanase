@@ -16,6 +16,15 @@
     createhome: no
 
 -
+  name: Prepare log directory
+  file:
+    group: "{{ kibana_group }}"
+    owner: "{{ kibana_user }}"
+    path: "{{ kibana_log_path | dirname }}"
+    recurse: yes
+    state: directory
+
+-
   name: Prepare destination directory
   file:
     group: "{{ kibana_group }}"
@@ -58,3 +67,18 @@
     src: kibana.yml.j2
     group: "{{ kibana_group }}"
     owner: "{{ kibana_user }}"
+
+-
+  name: Install supervisor config
+  template:
+    dest: /etc/supervisor/conf.d/kibana.conf
+    src: kibana.conf.j2
+    group: root
+    owner: root
+
+-
+  name: Start kibana
+  supervisorctl:
+    name: kibana
+    state: started
+  sudo: yes
