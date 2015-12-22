@@ -1,0 +1,51 @@
+---
+
+-
+  name: Add Oracle Java APT repository
+  apt_repository:
+    repo: 'ppa:webupd8team/java'
+    state: present
+
+-
+  name: Accept Oracle Java license
+  shell: echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | tee /etc/oracle-java8-acceptance | /usr/bin/debconf-set-selections
+  args:
+    creates: /etc/oracle-java8-acceptance
+
+-
+  name: Install Oracle Java
+  apt:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - oracle-java8-installer
+    - oracle-java8-set-default
+
+-
+  name: Import Elasticsearch GPG key
+  apt_key:
+    url: https://packages.elastic.co/GPG-KEY-elasticsearch
+    state: present
+
+-
+  name: Add Elasticsearch APT repository
+  apt_repository:
+    repo: 'deb http://packages.elastic.co/elasticsearch/2.x/debian stable main'
+    state: present
+    update_cache: yes
+
+-
+  name: Install Elasticsearch
+  apt:
+    name: elasticsearch
+    state: latest
+    update_cache: yes
+    dpkg_options: 'force-confdef,force-confold'
+  notify:
+    - Restart Elasticsearch
+
+-
+  name: Start Elasticsearch
+  service:
+    name: elasticsearch
+    state: started

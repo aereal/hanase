@@ -8,3 +8,4 @@
     - hostname
     - mackerel-agent
     - firewall
+    - elasticsearch
