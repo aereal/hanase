@@ -1,0 +1,33 @@
+---
+
+-
+  name: Fetch TD GPG key
+  command: curl -s -k -o /tmp/GPG-KEY-td-agent https://packages.treasuredata.com/GPG-KEY-td-agent
+  args:
+    creates: /tmp/GPG-KEY-td-agent
+
+-
+  name: Import TD GPG key
+  apt_key:
+    file: /tmp/GPG-KEY-td-agent
+    state: present
+
+-
+  name: Add TD APT repository
+  apt_repository:
+    repo: 'deb [arch=amd64] http://packages.treasuredata.com/2/ubuntu/trusty/ trusty contrib'
+    state: present
+    update_cache: yes
+
+-
+  name: Install td-agent
+  apt:
+    name: td-agent
+    state: latest
+    update_cache: yes
+
+-
+  name: Start td-agent
+  service:
+    name: td-agent
+    state: started
