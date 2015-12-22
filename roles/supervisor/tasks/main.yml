@@ -1,0 +1,13 @@
+---
+
+-
+  name: Install supervisor
+  apt:
+    name: supervisor
+    state: latest
+
+-
+  name: Start supervisor
+  service:
+    name: supervisor
+    state: started
