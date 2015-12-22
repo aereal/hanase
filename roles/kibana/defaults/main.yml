@@ -1,0 +1,6 @@
+---
+
+kibana_version_name: '4.3.1-linux-x64'
+kibana_root_path: /opt/kibana
+kibana_user: kibana
+kibana_group: staff

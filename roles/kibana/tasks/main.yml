@@ -1,0 +1,43 @@
+---
+
+# TODO: Check whether already installed or not
+-
+  get_url:
+    dest: /tmp/kibana.tar.gz
+    url: "https://download.elastic.co/kibana/kibana/kibana-{{ kibana_version_name }}.tar.gz"
+
+-
+  name: Prepare kibana user and group
+  user:
+    name: "{{ kibana_user }}"
+    group: "{{ kibana_group }}"
+    shell: /usr/sbin/nologin
+    state: present
+    createhome: no
+
+-
+  name: Prepare destination directory
+  file:
+    group: "{{ kibana_group }}"
+    owner: "{{ kibana_user }}"
+    path: "{{ kibana_root_path }}"
+    recurse: yes
+    state: directory
+
+-
+  name: Unarchive
+  unarchive:
+    dest: "{{ kibana_root_path }}"
+    group: "{{ kibana_group }}"
+    owner: "{{ kibana_user }}"
+    src: /tmp/kibana.tar.gz
+    copy: no
+
+-
+  name: Symlink
+  file:
+    group: "{{ kibana_group }}"
+    owner: "{{ kibana_user }}"
+    dest: "{{ kibana_root_path }}/latest"
+    src: "{{ kibana_root_path }}/kibana-{{ kibana_version_name }}"
+    state: link
