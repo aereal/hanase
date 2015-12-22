@@ -16,6 +16,54 @@
     dpkg_options: 'force-confdef,force-confold'
 
 -
+  name: Prepare vhost config directory
+  file:
+    path: "{{ nginx_vhost_config_root }}"
+    owner: root
+    group: root
+    recurse: yes
+    state: directory
+
+-
+  name: Prepare inc config directory
+  file:
+    path: "{{ nginx_inc_config_root }}"
+    owner: root
+    group: root
+    recurse: yes
+    state: directory
+
+-
+  name: Install log_format_ltsv.nginx.conf
+  copy:
+    dest: "{{ nginx_inc_config_root }}/log_format_ltsv.nginx.conf"
+    src: log_format_ltsv.nginx.conf
+    owner: root
+    group: root
+  notify:
+    - Reload nginx
+
+-
+  name: Install nginx.conf
+  template:
+    dest: "{{ nginx_config_root }}/nginx.conf"
+    src: nginx.conf.j2
+    owner: root
+    group: root
+  notify:
+    - Reload nginx
+
+-
+  name: Install default host conf
+  template:
+    dest: "{{ nginx_vhost_config_root }}/default.nginx.conf"
+    src: default.nginx.conf.j2
+    owner: root
+    group: root
+  notify:
+    - Reload nginx
+
+-
   name: Start nginx
   service:
     name: nginx
