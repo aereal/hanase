@@ -75,6 +75,8 @@
     src: kibana.conf.j2
     group: root
     owner: root
+  notify:
+    - Restart supervisor
 
 -
   name: Start kibana
