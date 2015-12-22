@@ -1,0 +1,22 @@
+---
+
+-
+  name: Add nginx APT repository
+  apt_repository:
+    repo: 'ppa:nginx/stable'
+    state: present
+    update_cache: yes
+
+-
+  name: Install nginx-extras
+  apt:
+    name: nginx-extras
+    state: latest
+    update_cache: yes
+    dpkg_options: 'force-confdef,force-confold'
+
+-
+  name: Start nginx
+  service:
+    name: nginx
+    state: started

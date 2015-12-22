@@ -11,3 +11,4 @@
     - firewall
     - elasticsearch
     - td-agent
+    - nginx
