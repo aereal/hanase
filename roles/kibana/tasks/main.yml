@@ -41,3 +41,20 @@
     dest: "{{ kibana_root_path }}/latest"
     src: "{{ kibana_root_path }}/kibana-{{ kibana_version_name }}"
     state: link
+
+-
+  name: Prepare config directory
+  file:
+    group: "{{ kibana_group }}"
+    owner: "{{ kibana_user }}"
+    path: "{{ kibana_root_path }}/etc"
+    recurse: yes
+    state: directory
+
+-
+  name: Install config
+  template:
+    dest: "{{ kibana_root_path }}/etc/kibana.yml"
+    src: kibana.yml.j2
+    group: "{{ kibana_group }}"
+    owner: "{{ kibana_user }}"
