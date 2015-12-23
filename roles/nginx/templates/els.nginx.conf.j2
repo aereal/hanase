@@ -1,0 +1,23 @@
+upstream els {
+  server 127.0.0.1:9200 fail_timeout=0;
+}
+
+upstream kibana {
+  server 127.0.0.1:{{ kibana_port }};
+}
+
+server {
+  listen 80;
+  server_name kibana.internal.hanase.aereal.org;
+
+  location /els {
+    rewrite /els/(.+) $1 break;
+    proxy_pass http://els/$1;
+  }
+
+  location / {
+    proxy_pass http://kibana;
+    auth_basic "Restricted";
+    auth_basic_user_file /etc/nginx/passwd/kibana.htpasswd;
+  }
+}

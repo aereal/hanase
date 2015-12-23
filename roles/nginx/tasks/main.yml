@@ -34,6 +34,28 @@
     state: directory
 
 -
+  name: Prepare passwd config directory
+  file:
+    path: "{{ nginx_config_root }}"
+    owner: root
+    group: root
+    recurse: yes
+    state: directory
+
+-
+  name: Install Python passlib for htpasswd module
+  apt:
+    name: python-passlib
+
+-
+  name: Prepare htpasswd
+  htpasswd:
+    name: "{{ kibana_basic_auth_user }}"
+    password: "{{ kibana_basic_auth_password }}"
+    path: /etc/nginx/passwd/kibana.htpasswd
+    state: present
+
+-
   name: Install log_format_ltsv.nginx.conf
   copy:
     dest: "{{ nginx_inc_config_root }}/log_format_ltsv.nginx.conf"
@@ -58,6 +80,16 @@
   template:
     dest: "{{ nginx_vhost_config_root }}/default.nginx.conf"
     src: default.nginx.conf.j2
+    owner: root
+    group: root
+  notify:
+    - Reload nginx
+
+-
+  name: Install els host conf
+  template:
+    dest: "{{ nginx_vhost_config_root }}/els.nginx.conf"
+    src: els.nginx.conf.j2
     owner: root
     group: root
   notify:
