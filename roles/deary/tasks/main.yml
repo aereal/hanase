@@ -1,0 +1,98 @@
+---
+
+-
+  name: Create an user
+  user:
+    name: www-app
+  sudo: yes
+
+-
+  name: Install Git for perl-build
+  apt:
+    name: git
+    install_recommends: no
+
+-
+  name: Install perl-build
+  git:
+    repo: https://github.com/tokuhirom/Perl-Build.git
+    accept_hostkey: yes
+    depth: 1
+    dest: /opt/perl-build
+    update: yes
+
+-
+  name: Install build dependencies
+  apt:
+    name: "{{ item }}"
+    install_recommends: no
+  with_items:
+    - build-essential
+
+-
+  name: Install Perl
+  command: /opt/perl-build/perl-build --jobs 4 --noman 5.22.1 /opt/perl-5.22.1
+  args:
+    creates: /opt/perl-5.22.1/bin/perl
+
+-
+  name: Install cpanminus
+  shell: curl -L https://cpanmin.us | /opt/perl-5.22.1/bin/perl - App::cpanminus
+  args:
+    creates: /opt/perl-5.22.1/bin/cpanm
+
+-
+  name: Install Carton
+  cpanm:
+    name: Carton
+    notest: yes
+  environment:
+    PATH: /opt/perl-5.22.1/bin:/usr/bin:/usr/sbin:/bin:/sbin
+
+-
+  name: Prepare applications directory
+  file:
+    owner: www-app
+    group: www-app
+    path: "{{ item }}"
+    recurse: yes
+    state: directory
+  with_items:
+    - ~www-app/apps/deary/source
+    - ~www-app/apps/deary/shared
+
+-
+  name: Create a deploy key
+  command: ssh-keygen -f ~www-app/.ssh/github-deary-deploy-key -t rsa -P ''
+  args:
+    creates: ~www-app/.ssh/github-deary-deploy-key
+  sudo: yes
+  sudo_user: www-app
+
+-
+  name: Fetch source
+  git:
+    repo: git@github.com:aereal/deary.git
+    accept_hostkey: yes
+    dest: ~www-app/apps/deary/source
+    update: yes
+    key_file: ~www-app/.ssh/github-deary-deploy-key
+    version: develop
+  sudo: yes
+  sudo_user: www-app
+
+-
+  name: Install modules
+  command: /opt/perl-5.22.1/bin/carton install --path ~www-app/apps/deary/shared/cpan --cpanfile ~www-app/apps/deary/source/cpanfile
+  environment:
+    PATH: /opt/perl-5.22.1/bin:/usr/bin:/usr/sbin:/bin:/sbin
+
+-
+  name: Install host conf
+  template:
+    dest: "{{ nginx_vhost_config_root }}/deary.nginx.conf"
+    src: deary.nginx.conf
+    owner: root
+    group: root
+  notify:
+    - Reload nginx
